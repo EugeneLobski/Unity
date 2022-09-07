@@ -1,9 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
-public class AlarmSystem : MonoBehaviour {
+public class AlarmSystem : MonoBehaviour
+{
     [SerializeField] private AudioSource _alarm;
+    [SerializeField] private float _fadeInDuration = 5f;
+    [SerializeField] private float _fadeOutDuration = 3f;
+
     private Coroutine _fadeIn;
     private Coroutine _fadeOut;
 
@@ -13,38 +18,25 @@ public class AlarmSystem : MonoBehaviour {
         if (_fadeOut != null)
             StopCoroutine(_fadeOut);
 
-        _fadeIn = StartCoroutine(FadeInSound());
+        _fadeIn = StartCoroutine(FadeSound(1f, _fadeInDuration));
     }
 
     public void TurnOff() {
         if (_fadeIn != null)
             StopCoroutine(_fadeIn);
 
-        _fadeOut = StartCoroutine(FadeOutSound());
+        _fadeOut = StartCoroutine(FadeSound(0f, _fadeOutDuration));
     }
 
-    private IEnumerator FadeInSound() {
-        if (_alarm.volume == 1)
-            yield break;
-
-        float fadeDuration = 5f;
-
-        while (_alarm.volume != 1) {
-            _alarm.volume = Mathf.MoveTowards(_alarm.volume, 1f, Time.deltaTime / fadeDuration);
-            yield return null;
-        }
-    }
-
-    private IEnumerator FadeOutSound() {
-        if (_alarm.volume == 0) {
-            _alarm.Stop();
+    private IEnumerator FadeSound(float targetVolume, float fadeDuration) {
+        if (_alarm.volume == targetVolume) {
+            if (_alarm.volume == 0)
+                _alarm.Stop();
             yield break;
         }
 
-        float fadeDuration = 5f;
-
-        while (_alarm.volume != 0) {
-            _alarm.volume = Mathf.MoveTowards(_alarm.volume, 0f, Time.deltaTime / fadeDuration);
+        while (_alarm.volume != targetVolume) {
+            _alarm.volume = Mathf.MoveTowards(_alarm.volume, targetVolume, Time.deltaTime / fadeDuration);
             yield return null;
         }
     }
