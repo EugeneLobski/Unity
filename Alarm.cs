@@ -7,18 +7,18 @@ using UnityEngine.Events;
 public class Alarm : MonoBehaviour
 {
     [SerializeField] private AudioSource _alarm;
-    private Coroutine _fadeIN;
-    private Coroutine _fadeOUT;
+    private Coroutine _fadeIn;
+    private Coroutine _fadeOut;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.TryGetComponent<CharacterController2D>(out CharacterController2D controller)) {
             _alarm.Play();
             
-            if (_fadeOUT != null)
-                StopCoroutine(_fadeOUT);
+            if (_fadeOut != null)
+                StopCoroutine(_fadeOut);
             
-            _fadeIN = StartCoroutine(FadeInSound());
+            _fadeIn = StartCoroutine(FadeInSound());
         }
     }
 
@@ -26,10 +26,10 @@ public class Alarm : MonoBehaviour
     {
         if (collision.TryGetComponent<CharacterController2D>(out CharacterController2D controller)) {
 
-            if (_fadeIN != null)
-                StopCoroutine(_fadeIN);
+            if (_fadeIn != null)
+                StopCoroutine(_fadeIn);
             
-            _fadeOUT = StartCoroutine(FadeOutSound());
+            _fadeOut = StartCoroutine(FadeOutSound());
         }
     }
 
