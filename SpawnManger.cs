@@ -12,7 +12,7 @@ public class SpawnManger : MonoBehaviour
     }
 
     private IEnumerator SpawnEnemy(Spawner[] spawners, float delay) {
-        while (true) // � ������ ��� ������� ������
+        while (true) // в задаче нет условия выхода... не стал ничего придумывать
         {
             foreach (Spawner spawner in spawners) {
                 spawner.CreateEnemy();
