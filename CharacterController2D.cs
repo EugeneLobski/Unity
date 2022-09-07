@@ -2,9 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody2D))]
+
 public class CharacterController2D : MonoBehaviour
 {
-    private const float MOVE_SPEED = 5f;
+    private const float _moveSpeed = 5f;
 
     private enum State {
         Normal,
@@ -87,7 +89,7 @@ public class CharacterController2D : MonoBehaviour
     {
         switch (_state) {
             case State.Normal:
-                _rigidbody2D.velocity = _moveDrirection * MOVE_SPEED;
+                _rigidbody2D.velocity = _moveDrirection * _moveSpeed;
 
                 if (_isDashButtonDown)
                 {
