@@ -4,30 +4,23 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Animations;
 
-public class WaypointMovement : MonoBehaviour
-{
-    
+public class WaypointMovement : MonoBehaviour {
     [SerializeField] private float _speed;
+    
     private Transform _path;
-    
-    
     private Transform[] _points;
-
     private int _currentPoint;
 
-    void Start()
-    {
+    void Start() {
         _path = transform.parent.Find("Path");
         _points = new Transform[_path.childCount];
 
-        for (int i = 0; i < _path.childCount; i++)
-        {
+        for (int i = 0; i < _path.childCount; i++) {
             _points[i] = _path.GetChild(i);
         }
     }
 
-    private void Update()
-    {
+    private void Update() {
         Transform target = _points[_currentPoint];
 
         var direction = (target.position - transform.position).normalized;
@@ -35,12 +28,10 @@ public class WaypointMovement : MonoBehaviour
         Debug.DrawRay(transform.position, direction);
         transform.position = Vector3.MoveTowards(transform.position, target.position, _speed * Time.deltaTime);
         
-        if (transform.position == target.position)
-        {
+        if (transform.position == target.position) {
             _currentPoint++;
 
-            if (_currentPoint >= _points.Length)
-            {
+            if (_currentPoint >= _points.Length) {
                 _currentPoint = 0;
             }
         }
