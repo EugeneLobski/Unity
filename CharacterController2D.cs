@@ -4,8 +4,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
 
-public class CharacterController2D : MonoBehaviour
-{
+public class CharacterController2D : MonoBehaviour {
     private const float _moveSpeed = 5f;
     private const float _rushSpeed = 20f;
 
@@ -27,14 +26,12 @@ public class CharacterController2D : MonoBehaviour
     private bool _isDashButtonDown = false;
     private State _state;
 
-    private void Awake()
-    {
+    private void Awake() {
         _rigidbody2D = GetComponent<Rigidbody2D>();
         _state = State.Normal;
     }
 
-    private void Update()
-    {
+    private void Update() {
         switch (_state)
         {
             case State.Normal:
@@ -79,8 +76,7 @@ public class CharacterController2D : MonoBehaviour
         }
     }
 
-    private void FixedUpdate()
-    {
+    private void FixedUpdate() {
         switch (_state) {
             case State.Normal:
                 _rigidbody2D.velocity = _moveDrirection * _moveSpeed;
