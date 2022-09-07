@@ -7,6 +7,7 @@ using UnityEngine;
 public class CharacterController2D : MonoBehaviour
 {
     private const float _moveSpeed = 5f;
+    private const float _rushSpeed = 20f;
 
     private enum State {
         Normal,
@@ -14,12 +15,15 @@ public class CharacterController2D : MonoBehaviour
     }
 
     [SerializeField] private LayerMask _dashLayerMask;
+    [SerializeField] private float _rushSpeedDropMultiplier = 8f;
+    [SerializeField] private float _rushSpeedMinimum = 2f;
+    [SerializeField] private float _dashAmount = 7f;
 
     private Rigidbody2D _rigidbody2D;
+    private float _rushCurrentSpeed;
     private Vector3 _moveDrirection;
     private Vector3 _rushDirection;
     private Vector3 _lastMoveDirection;
-    private float _rushSpeed;
     private bool _isDashButtonDown = false;
     private State _state;
 
@@ -37,20 +41,16 @@ public class CharacterController2D : MonoBehaviour
                 float moveX = 0f;
                 float moveY = 0f;
 
-                if (Input.GetKey(KeyCode.W))
-                {
+                if (Input.GetKey(KeyCode.W)) {
                     moveY = +1f;
                 }
-                if (Input.GetKey(KeyCode.S))
-                {
+                if (Input.GetKey(KeyCode.S)) {
                     moveY = -1f;
                 }
-                if (Input.GetKey(KeyCode.A))
-                {
+                if (Input.GetKey(KeyCode.A)) {
                     moveX = -1f;
                 }
-                if (Input.GetKey(KeyCode.D))
-                {
+                if (Input.GetKey(KeyCode.D)) {
                     moveX = +1f;
                 }
 
@@ -60,29 +60,23 @@ public class CharacterController2D : MonoBehaviour
                     _lastMoveDirection = _moveDrirection;
 
                 if (Input.GetKeyDown(KeyCode.F))
-                {
                     _isDashButtonDown = true;
-                }
 
-                if (Input.GetKeyDown(KeyCode.Space))
-                {
+                if (Input.GetKeyDown(KeyCode.Space)) {
                     _rushDirection = _lastMoveDirection;
-                    _rushSpeed = 20f;
+                    _rushCurrentSpeed = _rushSpeed;
                     _state = State.Rush;
                 }
                 break;
 
             case State.Rush:
-                float rushSpeedDropMultiplier = 5f;
-                _rushSpeed -= _rushSpeed * rushSpeedDropMultiplier * Time.deltaTime;
-
-                float rushSpeedMinimum = 2f;
+                _rushCurrentSpeed -= _rushCurrentSpeed * _rushSpeedDropMultiplier * Time.deltaTime;
                 
-                if (_rushSpeed < rushSpeedMinimum)
+                if (_rushCurrentSpeed < _rushSpeedMinimum)
                     _state = State.Normal;
+                
                 break;
         }
-
     }
 
     private void FixedUpdate()
@@ -91,12 +85,10 @@ public class CharacterController2D : MonoBehaviour
             case State.Normal:
                 _rigidbody2D.velocity = _moveDrirection * _moveSpeed;
 
-                if (_isDashButtonDown)
-                {
-                    float dashAmount = 7f;
-                    Vector3 dashPosition = transform.position + _lastMoveDirection * dashAmount;
+                if (_isDashButtonDown) {
+                    Vector3 dashPosition = transform.position + _lastMoveDirection * _dashAmount;
 
-                    RaycastHit2D raycastHit2D = Physics2D.Raycast(transform.position, _lastMoveDirection, dashAmount, _dashLayerMask);
+                    RaycastHit2D raycastHit2D = Physics2D.Raycast(transform.position, _lastMoveDirection, _dashAmount, _dashLayerMask);
 
                     if (raycastHit2D.collider != null)
                         dashPosition = raycastHit2D.point;
