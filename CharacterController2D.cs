@@ -4,7 +4,8 @@ using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
 
-public class CharacterController2D : MonoBehaviour {
+public class CharacterController2D : MonoBehaviour 
+{
     private const float _moveSpeed = 5f;
     private const float _rushSpeed = 20f;
 
