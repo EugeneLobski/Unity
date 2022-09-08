@@ -4,7 +4,8 @@ using System.Threading;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class AlarmZone : MonoBehaviour {
+public class AlarmZone : MonoBehaviour 
+{
     [SerializeField] private UnityEvent _cameIn;
     [SerializeField] private UnityEvent _cameOut;
 
