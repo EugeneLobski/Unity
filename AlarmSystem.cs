@@ -29,6 +29,7 @@ public class AlarmSystem : MonoBehaviour
 
         _fadeOut = StartCoroutine(FadeSound(_minVolume, _fadeOutDuration));
     }
+    
     private IEnumerator FadeSound(float targetVolume, float fadeDuration) {
         if (_alarm.volume == targetVolume) {
             if (_alarm.volume == _minVolume)
