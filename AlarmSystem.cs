@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class AlarmSystem : MonoBehaviour
+public class AlarmSystem : MonoBehaviour 
 {
     [SerializeField] private AudioSource _alarm;
     [SerializeField] private float _fadeInDuration = 5f;
@@ -31,14 +31,13 @@ public class AlarmSystem : MonoBehaviour
     }
     
     private IEnumerator FadeSound(float targetVolume, float fadeDuration) {
-        if (_alarm.volume == targetVolume) {
-            if (_alarm.volume == _minVolume)
-                _alarm.Stop();
-            yield break;
-        }
-
+        
         while (_alarm.volume != targetVolume) {
             _alarm.volume = Mathf.MoveTowards(_alarm.volume, targetVolume, Time.deltaTime / fadeDuration);
+
+            if (_alarm.volume == _minVolume) {
+                _alarm.Stop();
+            }
             yield return null;
         }
     }
