@@ -11,6 +11,8 @@ public class AlarmSystem : MonoBehaviour
 
     private Coroutine _fadeIn;
     private Coroutine _fadeOut;
+    private float _maxVolume = 1f;
+    private float _minVolume = 0f;
 
     public void TurnOn() {
         _alarm.Play();
@@ -18,19 +20,18 @@ public class AlarmSystem : MonoBehaviour
         if (_fadeOut != null)
             StopCoroutine(_fadeOut);
 
-        _fadeIn = StartCoroutine(FadeSound(1f, _fadeInDuration));
+        _fadeIn = StartCoroutine(FadeSound(_maxVolume, _fadeInDuration));
     }
 
     public void TurnOff() {
         if (_fadeIn != null)
             StopCoroutine(_fadeIn);
 
-        _fadeOut = StartCoroutine(FadeSound(0f, _fadeOutDuration));
+        _fadeOut = StartCoroutine(FadeSound(_minVolume, _fadeOutDuration));
     }
-
     private IEnumerator FadeSound(float targetVolume, float fadeDuration) {
         if (_alarm.volume == targetVolume) {
-            if (_alarm.volume == 0)
+            if (_alarm.volume == _minVolume)
                 _alarm.Stop();
             yield break;
         }
